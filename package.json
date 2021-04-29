@@ -1,0 +1,31 @@
+{
+  "name": "QueroDelivery",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./bin/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "azure-storage": "^2.1.0",
+    "body-parser": "^1.19.0",
+    "debug": "^4.3.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "guid": "^0.0.12",
+    "helmet": "^4.5.0",
+    "http": "*",
+    "jsonwebtoken": "^7.4.0",
+    "md5": "^2.3.0",
+    "mongoose": "^5.12.5",
+    "newsapi": "^2.4.1",
+    "sendgrid": "^2.0.0",
+    "slugify": "^1.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
