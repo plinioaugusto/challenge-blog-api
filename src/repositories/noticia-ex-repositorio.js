@@ -9,7 +9,7 @@ exports.buscar = async(palavraChave) =>{
         q: palavraChave,
         from: '2021-04-10',
         to: '2021-04-29',
-        language: 'en',
+        language: 'pt',
         sortBy: 'relevancy',
         page: 2
     });

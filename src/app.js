@@ -37,4 +37,4 @@ app.use('/tag', tagRotas);
 app.use('/usuario', usuarioRotas);
 app.use('/noticiaex', noticiasExternaRotas);
 
-module.exports = app;//Exportando modulo para o require
+module.exports = app;//Exportando modulo para o requires
