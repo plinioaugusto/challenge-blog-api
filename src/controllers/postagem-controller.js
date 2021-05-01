@@ -30,6 +30,29 @@ exports.getById = async(req, res, next) =>{
     }
 }
 
+exports.getByAll = async(req, res, next) =>{
+    try{
+        var data = await repositorio.buscarByAll(req.body);
+        res.status(200).send(data);
+    }catch(e){
+        console.log(e)
+        res.status(500).send({
+            message: "Falha ao buscar sua requisição"
+        });
+    }
+}
+
+exports.getExterna = async(req, res, next) =>{
+    try{
+        var data = await repositorio.buscarExterna(req.body.palavraChave);
+        res.status(200).send(data);
+    }catch(e){
+        res.status(500).send({
+            message: "Falha ao buscar notícias"
+        });
+    }
+};
+
 exports.post = async(req, res, next) => {
     try{
         const token = req.body.token || req.query.token || req.headers['x-access-token'];

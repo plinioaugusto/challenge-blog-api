@@ -3,6 +3,10 @@
 const mongoose = require('mongoose');
 const Postagem = mongoose.model('Postagem');
 const slugify = require('slugify');
+const config = require('../config');
+const NewsAPI = require('newsapi');
+const moment = require('moment');
+const newsapi = new NewsAPI(config.noticiaKEY);
 
 exports.buscar = async() =>{
     const res = await Postagem.find({
@@ -15,7 +19,33 @@ exports.buscar = async() =>{
 }
 
 exports.buscarById = async(id) =>{
-    const res =  await Postagem.findById(id);
+    const res =  await Postagem.findById(id)
+    .populate('categoria', 'nome' )
+    .populate('tags', 'nome')
+    .populate('autor', 'nome');
+    return res;
+}
+
+exports.buscarByAll = async(data) =>{
+    const res =  await Postagem.find(data)
+    .populate('categoria', 'nome' )
+    .populate('tags', 'nome')
+    .populate('autor', 'nome');
+    return res;
+}
+
+exports.buscarExterna = async(palavraChave) =>{
+    let dataFim = moment().format('YYYY-MM-DD');
+    let dataInicio = moment().subtract(7, 'days').format('YYYY-MM-DD');
+ 
+    const res = newsapi.v2.everything({
+        q: palavraChave,
+        from: dataInicio ,
+        to: dataFim,
+        language: 'pt',
+        sortBy: 'relevancy',
+        page: 2
+    });
     return res;
 }
 

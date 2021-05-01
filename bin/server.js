@@ -1,10 +1,8 @@
 'use strict'
 
-//importando os pacotes pelo 'require'
-//todos os requires sem passar caminho é importado da pasta node_modules
 const app = require('../src/app');
-const http = require('http'); //Para utilizar o servidor http
-const debug = require('debug')('querodelivery:server'); //Para debugar o codigo
+const http = require('http');
+const debug = require('debug')('querodelivery:server');
 
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
@@ -23,7 +21,7 @@ function normalizePort(val){
     const port = parseInt(val, 10);
 
     if(isNaN(port)){
-        return val;_
+        return val;
     }
     if(port >= 0){
         return port;
