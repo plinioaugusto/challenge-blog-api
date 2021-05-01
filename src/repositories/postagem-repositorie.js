@@ -1,5 +1,6 @@
 'use strict';
 
+const db = require('../db');
 const mongoose = require('mongoose');
 const Postagem = mongoose.model('Postagem');
 const slugify = require('slugify');
@@ -8,37 +9,206 @@ const NewsAPI = require('newsapi');
 const moment = require('moment');
 const newsapi = new NewsAPI(config.noticiaKEY);
 
-exports.get = async() =>{
-    const res = await Postagem.find({
-        excluida: false
-    })
-    .populate('categoria', 'nome' )
-    .populate('tags', 'nome')
-    .populate('autor', 'nome');
-    return res;
+async function findAll() {
+
+    var pipeline = [
+        {
+            $match:{
+                excluida: false
+            }
+        },
+        {
+            $lookup: {
+                from: 'categorias',
+                localField: 'categoria',
+                foreignField: '_id',
+                as: 'categoria'
+            }
+        },
+        {
+            $lookup: {
+                from: 'tags',
+                localField: 'tags',
+                foreignField: '_id',
+                as: 'tags'
+            }
+        },
+        {
+            $lookup: {
+                from: 'usuarios',
+                localField: 'autor',
+                foreignField: '_id',
+                as: 'autor'
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                titulo: 1,
+                autor:{
+                    nome: 1,
+                    email: 1,
+                    nivel:1
+                },
+                tags:{
+                    nome: 1
+                },
+                dataPublicacao: 1,
+                publicada: 1,
+                status: 1,
+                excluida: 1,
+                subTitulo: 1,
+                texto: 1,
+                fonte: 1,
+                fonteLink: 1,
+                url: 1,
+                imagemCapa: 1,
+                categoria: {
+                    nome: 1
+                },
+                dataCriacao: 1
+            }
+        }
+    ]
+
+    const postagem = global.conn.collection("postagems");
+    return await postagem.aggregate(pipeline).toArray();
 }
 
-exports.getById = async(id) =>{
-    const res =  await Postagem.findById(id)
-    .populate('categoria', 'nome' )
-    .populate('tags', 'nome')
-    .populate('autor', 'nome');
-    return res;
+async function getById(id){
+    var pipelineID = [
+        {
+            $match:{
+                _id : id
+            }
+        },
+        {
+            $lookup: {
+                from: 'categorias',
+                localField: 'categoria',
+                foreignField: '_id',
+                as: 'categoria'
+            }
+        },
+        {
+            $lookup: {
+                from: 'tags',
+                localField: 'tags',
+                foreignField: '_id',
+                as: 'tags'
+            }
+        },
+        {
+            $lookup: {
+                from: 'usuarios',
+                localField: 'autor',
+                foreignField: '_id',
+                as: 'autor'
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                titulo: 1,
+                autor:{
+                    nome: 1,
+                    email: 1,
+                    nivel:1
+                },
+                tags:{
+                    nome: 1
+                },
+                dataPublicacao: 1,
+                publicada: 1,
+                status: 1,
+                excluida: 1,
+                subTitulo: 1,
+                texto: 1,
+                fonte: 1,
+                fonteLink: 1,
+                url: 1,
+                imagemCapa: 1,
+                categoria: {
+                    nome: 1
+                },
+                dataCriacao: 1
+            }
+        }
+    ]
+
+    const postagem = global.conn.collection("postagems");
+    return await postagem.aggregate(pipelineID).toArray();
 }
 
-exports.getByAll = async(data) =>{
-    const res =  await Postagem.find(data)
-    .populate('categoria', 'nome' )
-    .populate('tags', 'nome')
-    .populate('autor', 'nome');
-    return res;
+async function getByAll(data){
+    
+    var pipelineID = [
+        {
+            $match: data
+        },
+        
+        {
+            $lookup: {
+                from: 'categorias',
+                localField: 'categoria',
+                foreignField: '_id',
+                as: 'categoria'
+            }
+        },
+        {
+            $lookup: {
+                from: 'tags',
+                localField: 'tags',
+                foreignField: '_id',
+                as: 'tags'
+            }
+        },
+        {
+            $lookup: {
+                from: 'usuarios',
+                localField: 'autor',
+                foreignField: '_id',
+                as: 'autor'
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                titulo: 1,
+                autor:{
+                    nome: 1,
+                    email: 1,
+                    nivel:1
+                },
+                tags:{
+                    nome: 1
+                },
+                dataPublicacao: 1,
+                publicada: 1,
+                status: 1,
+                excluida: 1,
+                subTitulo: 1,
+                texto: 1,
+                fonte: 1,
+                fonteLink: 1,
+                url: 1,
+                imagemCapa: 1,
+                categoria: {
+                    nome: 1
+                },
+                dataCriacao: 1
+            }
+        },
+    ]
+    const postagem = global.conn.collection("postagems");
+    return await postagem.aggregate(pipelineID).toArray();
 }
 
-exports.getExternal = async(palavraChave) =>{
+async function getExternal (palavraChave) {
     let dataFim = moment().format('YYYY-MM-DD');
     let dataInicio = moment().subtract(7, 'days').format('YYYY-MM-DD');
  
-    const res = newsapi.v2.everything({
+    const res = await newsapi.v2.everything({
         q: palavraChave,
         from: dataInicio ,
         to: dataFim,
@@ -49,12 +219,11 @@ exports.getExternal = async(palavraChave) =>{
     return res;
 }
 
-exports.post = async(data) =>{
+async function post (data){
     var postagem = new Postagem(data);
     await postagem.save()
 }
-
-exports.put = async(id, data) =>{
+async function put (id, data) {
     await Postagem.findByIdAndUpdate(id,{
         $set: {
             titulo:  data.titulo,
@@ -75,7 +244,7 @@ exports.put = async(id, data) =>{
     })
 }
 
-exports.publish = async(id) =>{
+async function publish (id) {
     await Postagem.findByIdAndUpdate(id,{
         $set: {
             publicada:  true,
@@ -85,7 +254,7 @@ exports.publish = async(id) =>{
     })
 }
 
-exports.schedule = async(id, data) =>{
+async function schedule (id, data) {
     await Postagem.findByIdAndUpdate(id,{
         $set: {
             publicada:  false,
@@ -95,8 +264,10 @@ exports.schedule = async(id, data) =>{
     })
 }
 
-exports.delete = async(id) => {
+async function deleteId (id) {
     await Postagem.findByIdAndUpdate(id,{
         excluida: true 
     });
 }
+
+module.exports = {findAll, getById, getByAll,getExternal, post, put, publish, schedule, deleteId};

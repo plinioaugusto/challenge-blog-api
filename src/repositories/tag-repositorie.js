@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const Tag = mongoose.model('Tag');
 
 exports.get = async() =>{
-    const res = await Tag.find({});
+    const res = await Tag.find({
+        ativa: true});
     return res;
 }
 
@@ -28,5 +29,9 @@ exports.put = async(id, data) =>{
 }
 
 exports.delete = async(id) => {
-    await Tag.findByIdAndRemove(id);
+    await Tag.findByIdAndUpdate(id,{
+        $set:{
+            ativa: false
+        }
+    });
 }

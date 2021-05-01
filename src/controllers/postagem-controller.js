@@ -1,5 +1,6 @@
 'use strict';
 
+const mongoose = require('mongoose');
 const repositorio = require('../repositories/postagem-repositorie');
 const azure = require('azure-storage');
 const guid = require('guid');
@@ -9,7 +10,7 @@ const slugify = require('slugify');
 
 exports.get = async(req, res, next) =>{
     try{
-        var data = await repositorio.get();
+        var data = await repositorio.findAll();
         res.status(200).send(data);
     }catch(e){
         console.log(e)
@@ -21,7 +22,8 @@ exports.get = async(req, res, next) =>{
 
 exports.getById = async(req, res, next) =>{
     try{
-        var data = await repositorio.getById(req.params.id);
+        let id = mongoose.Types.ObjectId(req.params.id);
+        var data = await repositorio.getById(id);
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({
@@ -35,7 +37,6 @@ exports.getByAll = async(req, res, next) =>{
         var data = await repositorio.getByAll(req.body);
         res.status(200).send(data);
     }catch(e){
-        console.log(e)
         res.status(500).send({
             message: "Falha ao buscar sua requisição"
         });
@@ -56,7 +57,7 @@ exports.getExternal = async(req, res, next) =>{
 exports.post = async(req, res, next) => {
     try{
         const token = req.body.token || req.query.token || req.headers['x-access-token'];
-        const dadosToken = await authService.decodificarToken(token);//Salvando na variável o id, nome e email contido no token
+        const dadosToken = await authService.decodeToken(token);//Salvando na variável o id, nome e email contido no token
 
         // Cria o Blob Service
         const blobServico = azure.createBlobService(config.azureConnectionString);
@@ -92,6 +93,7 @@ exports.post = async(req, res, next) => {
         });
         res.status(201).send({message: 'Postagem cadastrada com sucesso!'});
     }catch(e){
+        console.log(e)
         res.status(500).send({
             message: "Falha ao criar sua postagem"
         });

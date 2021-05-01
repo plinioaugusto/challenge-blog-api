@@ -7,11 +7,13 @@ const schema = new Schema({
     nome:{
         type: String,
         required: true,
+        index: true,
+        unique: true
     },
     ativa:{
         type: Boolean,
         required: true,
-        default: false
+        default: true
     }
 });
 

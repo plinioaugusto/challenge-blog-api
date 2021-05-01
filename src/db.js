@@ -7,13 +7,16 @@ const ObjectId = require("mongodb").ObjectId;
 mongoClient.connect(config.connectionString, {
         useUnifiedTopology: true
     })
-    .then(conn => global.conn = conn.db("db-Blog"))
-    .catch(err => console.log(err));
+    .then(conn =>
+        global.conn = conn.db("myFirstDatabase"))
+    .catch(err =>
+        console.log(err));
 
-    console.log(global.conn)
-
+        
 function findAll() {
-    return global.conn.collection("postagems").find().toArray();
+    return global.conn.collection("postagems")
+    .find({excluida: false})
+    .toArray();
 }
 
 function findOne(id) {
@@ -26,14 +29,6 @@ function insert(customer) {
 
 function update(id, customer) {
     return global.conn.collection("postagems").updateOne({ _id: new ObjectId(id) }, { $set: customer });
-}
-
-function update(id, customer) {
-    return global.conn.collection("postagems").updateOne({ _id: new ObjectId(id) }, { $set: customer });
-}
-
-function deleteOne(id) {
-    return global.conn.collection("postagems").deleteOne({ _id: new ObjectId(id) });
 }
 
 function deleteOne(id) {

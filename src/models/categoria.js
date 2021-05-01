@@ -10,8 +10,7 @@ const schema = new Schema({
     },
     ativa:{
         type: Boolean,
-        required: true,
-        default: false
+        default: true
     }
 });
 

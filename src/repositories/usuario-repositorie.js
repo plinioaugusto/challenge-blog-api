@@ -35,7 +35,11 @@ exports.put = async(id, data) =>{
 
 
 exports.delete = async(id) => {
-    await Usuario.findByIdAndRemove(id);
+    await Usuario.findByIdAndUpdate(id,{
+        $set:{
+            ativa: false
+        }
+    });
 }
 
 exports.inactivate = async(id) =>{

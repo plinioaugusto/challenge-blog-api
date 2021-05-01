@@ -28,5 +28,9 @@ exports.put = async(id, data) =>{
 }
 
 exports.delete = async(id) => {
-    await Categoria.findByIdAndRemove(id);
+    await Categoria.findByIdAndUpdate(id,{
+        $set:{
+            ativa: false
+        }
+    });
 }

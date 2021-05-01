@@ -56,6 +56,7 @@ exports.put = async(req, res, next) => {
             message: 'Usuario atualizada com sucesso!'
         });
     }catch(e){
+        console.log(e)
         res.status(500).send({
             message: "Falha ao atualizar sua requisição"
         });
