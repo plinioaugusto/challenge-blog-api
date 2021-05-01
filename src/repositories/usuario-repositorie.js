@@ -2,41 +2,43 @@
 
 const mongoose = require('mongoose');
 const Usuario = mongoose.model('Usuario');
+const md5 = require('md5');
 
-exports.buscar = async() =>{
+exports.get = async() =>{
     const res = await Usuario.find({
         ativa: true
     });
     return res;
 }
 
-exports.buscarById = async(id) =>{
+exports.getById = async(id) =>{
     const res =  await Usuario.findById(id);
     return res;
 }
 
-exports.criar = async(data) =>{
+exports.post = async(data) =>{
     var usuario = new Usuario(data);
     await usuario.save()
 }
 
-exports.atualizar = async(id, data) =>{
+exports.put = async(id, data) =>{
     await Usuario.findByIdAndUpdate(id,{
         $set: {
             nome:  data.nome,
             email:  data.email,
-            senha:  data.senha,
+            senha:  md5(data.senha + global.CHAVE_CODIFICADORA),
             nivel:  data.nivel,
             ativa:  data.ativa
         }
     })
 }
 
-exports.deletar = async(id) => {
+
+exports.delete = async(id) => {
     await Usuario.findByIdAndRemove(id);
 }
 
-exports.inativar = async(id) =>{
+exports.inactivate = async(id) =>{
     await Usuario.findByIdAndUpdate(id,{
         $set: {
             ativa:  false
@@ -44,7 +46,7 @@ exports.inativar = async(id) =>{
     })
 }
 
-exports.ativar = async(id) =>{
+exports.activate = async(id) =>{
     await Usuario.findByIdAndUpdate(id,{
         $set: {
             ativa:  true
@@ -52,7 +54,7 @@ exports.ativar = async(id) =>{
     })
 }
 
-exports.autenticar = async(data) =>{
+exports.authenticate = async(data) =>{
     const res = await Usuario.findOne({
         email: data.email,
         senha: data.senha

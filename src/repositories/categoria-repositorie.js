@@ -3,22 +3,22 @@
 const mongoose = require('mongoose');
 const Categoria = mongoose.model('Categoria');
 
-exports.buscar = async() =>{
+exports.get = async() =>{
     const res = await Categoria.find({});
     return res;
 }
 
-exports.buscarById = async(id) =>{
+exports.getById = async(id) =>{
     const res =  await Categoria.findById(id);
     return res;
 }
 
-exports.criar = async(data) =>{
+exports.post = async(data) =>{
     var categoria = new Categoria(data);
     await categoria.save()
 }
 
-exports.atualizar = async(id, data) =>{
+exports.put = async(id, data) =>{
     await Categoria.findByIdAndUpdate(id,{
         $set: {
             nome:  data.nome,
@@ -27,6 +27,6 @@ exports.atualizar = async(id, data) =>{
     })
 }
 
-exports.deletar = async(id) => {
+exports.delete = async(id) => {
     await Categoria.findByIdAndRemove(id);
 }

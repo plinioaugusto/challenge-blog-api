@@ -8,7 +8,7 @@ const NewsAPI = require('newsapi');
 const moment = require('moment');
 const newsapi = new NewsAPI(config.noticiaKEY);
 
-exports.buscar = async() =>{
+exports.get = async() =>{
     const res = await Postagem.find({
         excluida: false
     })
@@ -18,7 +18,7 @@ exports.buscar = async() =>{
     return res;
 }
 
-exports.buscarById = async(id) =>{
+exports.getById = async(id) =>{
     const res =  await Postagem.findById(id)
     .populate('categoria', 'nome' )
     .populate('tags', 'nome')
@@ -26,7 +26,7 @@ exports.buscarById = async(id) =>{
     return res;
 }
 
-exports.buscarByAll = async(data) =>{
+exports.getByAll = async(data) =>{
     const res =  await Postagem.find(data)
     .populate('categoria', 'nome' )
     .populate('tags', 'nome')
@@ -34,7 +34,7 @@ exports.buscarByAll = async(data) =>{
     return res;
 }
 
-exports.buscarExterna = async(palavraChave) =>{
+exports.getExternal = async(palavraChave) =>{
     let dataFim = moment().format('YYYY-MM-DD');
     let dataInicio = moment().subtract(7, 'days').format('YYYY-MM-DD');
  
@@ -49,12 +49,12 @@ exports.buscarExterna = async(palavraChave) =>{
     return res;
 }
 
-exports.criar = async(data) =>{
+exports.post = async(data) =>{
     var postagem = new Postagem(data);
     await postagem.save()
 }
 
-exports.atualizar = async(id, data) =>{
+exports.put = async(id, data) =>{
     await Postagem.findByIdAndUpdate(id,{
         $set: {
             titulo:  data.titulo,
@@ -75,7 +75,7 @@ exports.atualizar = async(id, data) =>{
     })
 }
 
-exports.publicar = async(id) =>{
+exports.publish = async(id) =>{
     await Postagem.findByIdAndUpdate(id,{
         $set: {
             publicada:  true,
@@ -85,7 +85,7 @@ exports.publicar = async(id) =>{
     })
 }
 
-exports.agendar = async(id, data) =>{
+exports.schedule = async(id, data) =>{
     await Postagem.findByIdAndUpdate(id,{
         $set: {
             publicada:  false,
@@ -95,7 +95,7 @@ exports.agendar = async(id, data) =>{
     })
 }
 
-exports.deletar = async(id) => {
+exports.delete = async(id) => {
     await Postagem.findByIdAndUpdate(id,{
         excluida: true 
     });

@@ -9,10 +9,10 @@ router.get('/',authService.isAdministrador, controller.get);
 router.get('/id/:id',authService.isLeitor, controller.getById);
 router.post('/',authService.isAdministrador, controller.post);
 router.put('/:id',authService.isLeitor, controller.put);
-router.put('/inativar/:id',authService.isAdministrador, controller.inativar);
-router.put('/ativar/:id',authService.isAdministrador, controller.ativar);
+router.put('/inativar/:id',authService.isAdministrador, controller.inactivate);
+router.put('/ativar/:id',authService.isAdministrador, controller.activate);
 router.delete('/',authService.isAdministrador, controller.delete);
-router.post('/autenticar', controller.autenticar);
-router.post('/atualizarToken', controller.atualizarToken);
+router.post('/autenticar', controller.authenticate);
+router.post('/atualizarToken', controller.updateToken);
 
 module.exports = router;

@@ -4,7 +4,7 @@ const repositorio = require('../repositories/tag-repositorie');
 
 exports.get = async(req, res, next) =>{
     try{
-        var data = await repositorio.buscar();
+        var data = await repositorio.get();
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({
@@ -15,7 +15,7 @@ exports.get = async(req, res, next) =>{
 
 exports.getById = async(req, res, next) =>{
     try{
-        var data = await repositorio.buscarById(req.params.id);
+        var data = await repositorio.getById(req.params.id);
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({
@@ -26,7 +26,7 @@ exports.getById = async(req, res, next) =>{
 
 exports.post = async(req, res, next) => {
     try{
-        await repositorio.criar(req.body);
+        await repositorio.post(req.body);
         res.status(201).send({message: 'Tag cadastrada com sucesso!'});
     }catch(e){
         res.status(500).send({
@@ -37,7 +37,7 @@ exports.post = async(req, res, next) => {
 
 exports.put = async(req, res, next) => {
     try{
-        await repositorio.atualizar(req.params.id, req.body);
+        await repositorio.put(req.params.id, req.body);
         res.status(200).send({
             message: 'Tag atualizada com sucesso!'
         });
@@ -50,7 +50,7 @@ exports.put = async(req, res, next) => {
 
 exports.delete = async(req, res, next) => {
     try{
-        await repositorio.deletar(req.body.id);
+        await repositorio.delete(req.body.id);
         res.status(200).send({
             message: 'Tag removida com sucesso!'
         });

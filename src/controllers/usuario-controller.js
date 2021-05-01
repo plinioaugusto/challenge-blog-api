@@ -7,7 +7,7 @@ const authService = require('../services/auth-service');
 
 exports.get = async(req, res, next) =>{
     try{
-        var data = await repositorio.buscar();
+        var data = await repositorio.get();
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({
@@ -18,7 +18,7 @@ exports.get = async(req, res, next) =>{
 
 exports.getById = async(req, res, next) =>{
     try{
-        var data = await repositorio.buscarById(req.params.id);
+        var data = await repositorio.getById(req.params.id);
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({
@@ -29,7 +29,7 @@ exports.getById = async(req, res, next) =>{
 
 exports.post = async(req, res, next) => {
     try{
-        await repositorio.criar({
+        await repositorio.post({
             nome: req.body.nome,
             email: req.body.email,
             senha: md5(req.body.senha + global.CHAVE_CODIFICADORA),
@@ -51,20 +51,20 @@ exports.post = async(req, res, next) => {
 
 exports.put = async(req, res, next) => {
     try{
-        await repositorio.atualizar(req.params.id, req.body);
+        await repositorio.put(req.params.id, req.body);
         res.status(200).send({
             message: 'Usuario atualizada com sucesso!'
         });
     }catch(e){
         res.status(500).send({
-            message: "Falha ao processar sua requisição"
+            message: "Falha ao atualizar sua requisição"
         });
     }
 };
 
 exports.delete = async(req, res, next) => {
     try{
-        await repositorio.deletar(req.body.id);
+        await repositorio.delete(req.body.id);
         res.status(200).send({
             message: 'Usuario removida com sucesso!'
         });
@@ -75,9 +75,9 @@ exports.delete = async(req, res, next) => {
     }
 };
 
-exports.inativar = async(req, res, next) => {
+exports.inactivate = async(req, res, next) => {
     try{
-        await repositorio.inativar(req.params.id);
+        await repositorio.inactivate(req.params.id);
         res.status(200).send({
             message: 'Usuario inativado com sucesso!'
         });
@@ -89,9 +89,9 @@ exports.inativar = async(req, res, next) => {
     }
 };
 
-exports.ativar = async(req, res, next) => {
+exports.activate = async(req, res, next) => {
     try{
-        await repositorio.ativar(req.params.id);
+        await repositorio.activate(req.params.id);
         res.status(200).send({
             message: 'Usuario ativado com sucesso!'
         });
@@ -103,9 +103,9 @@ exports.ativar = async(req, res, next) => {
     }
 };
 
-exports.autenticar = async(req, res, next) => {
+exports.authenticate = async(req, res, next) => {
     try{
-        const usuario =  await repositorio.autenticar({
+        const usuario =  await repositorio.authenticate({
             email: req.body.email,
             senha: md5(req.body.senha + global.CHAVE_CODIFICADORA),
         });
@@ -125,7 +125,7 @@ exports.autenticar = async(req, res, next) => {
         }
 
         //Gerando o token e incluindo o id, email e nome do usuário nele
-        const token =  await authService.gerarToken({
+        const token =  await authService.generateToken({
             id: usuario._id,
             email: usuario.email,
             nome: usuario.nome,
@@ -147,11 +147,11 @@ exports.autenticar = async(req, res, next) => {
     }
 };
 
-exports.atualizarToken = async(req, res, next) => {
+exports.updateToken = async(req, res, next) => {
     try{
         const token = req.body.token || req.query.token || req.headers['x-access-token']; //Obetendo token;
-        const dadosToken = await authService.decodificarToken(token); //Salvando na variável o id, nome e email contido no token;
-        const usuario =  await repositorio.buscarById(dadosToken.id); //Buscando usuário pelo id do token;
+        const dadosToken = await authService.decodeToken(token); //Salvando na variável o id, nome e email contido no token;
+        const usuario =  await repositorio.getById(dadosToken.id); //Buscando usuário pelo id do token;
 
         if(!usuario){
             res.status(404).send({
@@ -161,7 +161,7 @@ exports.atualizarToken = async(req, res, next) => {
         }
 
         //Gerando novo token e incluindo o id, email e nome do usuário;
-        const tokenAtualizado =  await authService.gerarToken({
+        const tokenAtualizado =  await authService.generateToken({
             id: usuario._id,
             email: usuario.email,
             nome: usuario.nome,

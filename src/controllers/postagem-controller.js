@@ -9,7 +9,7 @@ const slugify = require('slugify');
 
 exports.get = async(req, res, next) =>{
     try{
-        var data = await repositorio.buscar();
+        var data = await repositorio.get();
         res.status(200).send(data);
     }catch(e){
         console.log(e)
@@ -21,7 +21,7 @@ exports.get = async(req, res, next) =>{
 
 exports.getById = async(req, res, next) =>{
     try{
-        var data = await repositorio.buscarById(req.params.id);
+        var data = await repositorio.getById(req.params.id);
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({
@@ -32,7 +32,7 @@ exports.getById = async(req, res, next) =>{
 
 exports.getByAll = async(req, res, next) =>{
     try{
-        var data = await repositorio.buscarByAll(req.body);
+        var data = await repositorio.getByAll(req.body);
         res.status(200).send(data);
     }catch(e){
         console.log(e)
@@ -42,9 +42,9 @@ exports.getByAll = async(req, res, next) =>{
     }
 }
 
-exports.getExterna = async(req, res, next) =>{
+exports.getExternal = async(req, res, next) =>{
     try{
-        var data = await repositorio.buscarExterna(req.body.palavraChave);
+        var data = await repositorio.getExternal(req.body.palavraChave);
         res.status(200).send(data);
     }catch(e){
         res.status(500).send({
@@ -75,7 +75,7 @@ exports.post = async(req, res, next) => {
             }
         });
 
-        await repositorio.criar({
+        await repositorio.post({
             autor: dadosToken.id, //Atributo "autor" recebe o id do usuário logado.
             titulo: req.body.titulo,
             subTitulo: req.body.subTitulo,
@@ -100,7 +100,7 @@ exports.post = async(req, res, next) => {
 
 exports.put = async(req, res, next) => {
     try{
-        await repositorio.atualizar(req.params.id, req.body);
+        await repositorio.put(req.params.id, req.body);
         res.status(200).send({
             message: 'Postagem atualizada com sucesso!'
         });
@@ -113,9 +113,9 @@ exports.put = async(req, res, next) => {
     }
 };
 
-exports.publicar = async(req, res, next) => {
+exports.publish = async(req, res, next) => {
     try{
-        await repositorio.publicar(req.params.id);
+        await repositorio.publish(req.params.id);
         res.status(200).send({
             message: 'Postagem publicada com sucesso!'
         });
@@ -128,13 +128,13 @@ exports.publicar = async(req, res, next) => {
     }
 };
 
-exports.agendar = async(req, res, next) => {
+exports.schedule = async(req, res, next) => {
     try{
         var hoje = new Date();
         var publicacao = new Date(req.params.data);
 
         if(publicacao.getTime() > hoje.getTime()){
-            await repositorio.agendar(req.params.id, publicacao);
+            await repositorio.schedule(req.params.id, publicacao);
             res.status(200).send({
                 message: 'Postagem agendada com sucesso!'
             });
@@ -152,13 +152,13 @@ exports.agendar = async(req, res, next) => {
 
 exports.delete = async(req, res, next) => {
     try{
-        await repositorio.deletar(req.body.id);
+        await repositorio.delete(req.body.id);
         res.status(200).send({
             message: 'Postagem removida com sucesso!'
         });
     }catch(e){
         res.status(500).send({
-            message: "Falha ao processar sua requisição"
+            message: "Falha ao remover sua requisição"
         });
     }
 };

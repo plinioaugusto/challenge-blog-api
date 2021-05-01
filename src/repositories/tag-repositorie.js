@@ -3,22 +3,22 @@
 const mongoose = require('mongoose');
 const Tag = mongoose.model('Tag');
 
-exports.buscar = async() =>{
+exports.get = async() =>{
     const res = await Tag.find({});
     return res;
 }
 
-exports.buscarById = async(id) =>{
+exports.getById = async(id) =>{
     const res =  await Tag.findById(id);
     return res;
 }
 
-exports.criar = async(data) =>{
+exports.post = async(data) =>{
     var tag = new Tag(data);
     await tag.save()
 }
 
-exports.atualizar = async(id, data) =>{
+exports.put = async(id, data) =>{
     await Tag.findByIdAndUpdate(id,{
         $set: {
             nome:  data.nome,
@@ -27,6 +27,6 @@ exports.atualizar = async(id, data) =>{
     })
 }
 
-exports.deletar = async(id) => {
+exports.delete = async(id) => {
     await Tag.findByIdAndRemove(id);
 }

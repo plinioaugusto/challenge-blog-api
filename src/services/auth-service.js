@@ -3,20 +3,20 @@
 const jwt = require('jsonwebtoken');
 
 //Gerando o Token
-exports.gerarToken = async (data) => {
+exports.generateToken = async (data) => {
     return jwt.sign(data, global.CHAVE_CODIFICADORA, {
         expiresIn: 1800
     });
 }
 
 //Decodificando o Token
-exports.decodificarToken = async (token) => {
+exports.decodeToken = async (token) => {
     var data = await jwt.verify(token, global.CHAVE_CODIFICADORA);
     return data;
 }
 
 //Autorizar token
-exports.autorizar = function (req, res, next) {
+exports.authorize = function (req, res, next) {
     var token = req.body.token || req.query.token || req.headers['x-access-token'];//Buscando meu token nesses três campos.
 
     if (!token) {
@@ -38,22 +38,22 @@ exports.autorizar = function (req, res, next) {
 
 //Autorização
 exports.isAdministrador = function (req, res, next) {
-    verificarPermissao(req, res, next,['Administrador']);
+    checkPermission(req, res, next,['Administrador']);
 };
 
 exports.isRevisor = function (req, res, next) {
-    verificarPermissao(req, res, next,['Revisor','Administrador']);
+    checkPermission(req, res, next,['Revisor','Administrador']);
 };
 
 exports.isRedator = function (req, res, next) {
-    verificarPermissao(req, res, next,['Redator','Revisor','Administrador']);
+    checkPermission(req, res, next,['Redator','Revisor','Administrador']);
 };
 
 exports.isLeitor = function (req, res, next) {
-    verificarPermissao(req, res, next,['Leitor','Redator','Revisor','Administrador']);
+    checkPermission(req, res, next,['Leitor','Redator','Revisor','Administrador']);
 };
 
-function verificarPermissao(req, res, next, permissoes) {
+function checkPermission(req, res, next, permissoes) {
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
     if (!token) {
