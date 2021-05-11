@@ -4,7 +4,7 @@ const config = require('./config');
 const mongoClient = require("mongodb").MongoClient;
 const ObjectId = require("mongodb").ObjectId;
 
-mongoClient.connect(config.connectionString, {
+mongoClient.connect(global.CONNECTION_STRING, {
         useUnifiedTopology: true
     })
     .then(conn =>

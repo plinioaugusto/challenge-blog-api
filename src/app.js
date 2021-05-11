@@ -7,7 +7,7 @@ const config = require('./config');
 const helmet = require('helmet');
 
 //Conectando ao banco
-mongoose.connect(config.connectionString);
+mongoose.connect(global.CONNECTION_STRING);
 
 //Carregando os Models
 const Postagem = require('./models/postagem');

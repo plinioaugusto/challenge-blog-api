@@ -7,7 +7,7 @@ const slugify = require('slugify');
 const config = require('../config');
 const NewsAPI = require('newsapi');
 const moment = require('moment');
-const newsapi = new NewsAPI(config.noticiaKEY);
+const newsapi = new NewsAPI(global.NOTICIA_KEY);
 
 async function findAll() {
 

@@ -60,7 +60,7 @@ exports.post = async(req, res, next) => {
         const dadosToken = await authService.decodeToken(token);//Salvando na variável o id, nome e email contido no token
 
         // Cria o Blob Service
-        const blobServico = azure.createBlobService(config.azureConnectionString);
+        const blobServico = azure.createBlobService(global.AZURE_CONNECTIONSTRING);
 
         let nomeImagem = guid.raw().toString() + '.jpg'; //Gerando nome único para imagens no formato jpg
         let imgBase64 = req.body.imagemCapa; //Minha imagem em base64
