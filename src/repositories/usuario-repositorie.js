@@ -33,7 +33,6 @@ exports.put = async(id, data) =>{
     })
 }
 
-
 exports.delete = async(id) => {
     await Usuario.findByIdAndUpdate(id,{
         $set:{

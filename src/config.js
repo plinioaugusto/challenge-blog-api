@@ -1,4 +1,4 @@
-require('dotenv/config');
+
 
 global.CHAVE_CODIFICADORA = process.env.CHAVE_API;
 global.CONNECTION_STRING = process.env.CONNECTIONSTRING;
