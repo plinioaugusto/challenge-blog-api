@@ -7,14 +7,11 @@ const schema = new Schema({
   name: {
     type: String,
     required: true,
-    index: true,
-    unique: true,
   },
   isActive: {
     type: Boolean,
-    required: true,
     default: true,
   },
 });
 
-module.exports = mongoose.model("tag", schema);
+module.exports = mongoose.model("category", schema);
