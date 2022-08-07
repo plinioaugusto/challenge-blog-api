@@ -1,12 +1,12 @@
 # Blog-API-REST-NodeJS
 
-Sistema Back-End ojetivando uma plataforma de blog, com usuários, tags, categorias e postagens.
+Back-End System objectifying a blog platform, with users, tags, categories and posts.
 
-Projeto feito em NodeJS utilizando o express, com arquitetura REST e Banco de Dados MongoDB.
+Project made in NodeJS using express, with REST architecture and MongoDB Database.
 
-Autenticação por jwt;
-Níveis de acesso de autorização;
-Utilização de servidores para armazenamento de imagem da azure;
+Authentication by jwt;
+Authorization access levels;
+Use of Azure image storage servers;
 Design Partners MVC;
-Driver nativo e Mongoose na persistência de dados;
-Entre outros...
+Native driver and Mongoose in data persistence;
+Between others...
