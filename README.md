@@ -1,6 +1,8 @@
-# Desafio Desenvolvedor Back-end Junior QueroDeliveru
+# API REST para um blog de notícias
 
 Este repositório fez parte do desafio da QueroDelivery durante o processo seletivo para uma vaga de back-end junior com a tecnologia NodeJS.
+
+Foi através deste que consegui a vaga como desenvolvedor Júnior em /01/06/2021.
 
 ## 🚀 Começando
 
@@ -76,7 +78,7 @@ Este projeto está sob a licença (sua licença) - veja o arquivo [LICENSE.md](h
 
 ## 🎁 Expressões de gratidão
 
-- Foi através desse projeto que consegui a vaga para desenvolvedor. Obrigado, QueroDelivery!
+- Foi através desse projeto que consegui a vaga para desenvolvedor. Obrigado, QueroDelivery!]
 
 ---
 
